@@ -209,3 +209,4 @@ For questions or support, visit [zaidhassan.me](https://zaidhassan.me) or open a
 **Keywords:** AI transcription, speech-to-text, video transcription, offline transcription, Whisper AI, voice recognition, local AI, privacy-first AI, Streamlit app, video to text, audio transcription, subtitle generation
 # Transcriber
 # Transcriber
+# Transcriber
