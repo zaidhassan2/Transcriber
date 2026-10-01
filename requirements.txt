@@ -1,12 +1,6 @@
 streamlit>=1.28,<2
 faster-whisper>=1.0.3
-# openai-whisper kept as fallback only – faster-whisper is the active backend
-openai-whisper==20231117
-# torch: do NOT pin to a specific micro-version so pip can resolve correctly.
-# Streamlit Community Cloud (CPU-only) will install the CPU build automatically.
-torch>=2.0,<3
-torchvision>=0.15,<1
-torchaudio>=2.0,<3
+# torch/openai-whisper removed – faster-whisper uses ctranslate2, not PyTorch
 yt-dlp>=2024.1.0
 imageio-ffmpeg>=0.4.9
 python-multipart>=0.0.9
