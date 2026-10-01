@@ -1,6 +1,7 @@
 streamlit>=1.28,<2
 faster-whisper>=1.0.3
-# ctranslate2>=4.0 is required by faster-whisper 1.x (v3.x has incompatible API)
+# av>=12 removed metadata_errors from av.open() – pin to <12 for faster-whisper 1.x compat
+av>=9.0,<12
 ctranslate2>=4.0,<5
 yt-dlp>=2024.1.0
 imageio-ffmpeg>=0.4.9
