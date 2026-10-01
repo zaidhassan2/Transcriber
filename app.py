@@ -8,7 +8,7 @@ import sys
 # Page configuration
 st.set_page_config(
     page_title="AI Transcriber",
-    page_icon="🎙️",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -81,7 +81,7 @@ if 'processing' not in st.session_state:
 # -------------------------------------------------------------------------
 st.markdown("""
 <div class="main-header">
-    <h1>🎙️ AI Video Transcriber</h1>
+    <h1>AI Video Transcriber</h1>
     <p>Transform your videos into text with local AI - No cloud, No data leaks</p>
 </div>
 """, unsafe_allow_html=True)
@@ -160,7 +160,7 @@ def create_pdf_content(text: str) -> str:
 # Sidebar
 # -------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown("### 📋 Instructions")
+    st.markdown("### Instructions")
     st.markdown("""
     1. **Upload** a video file (MP4, MOV, AVI, MKV, WEBM)
     2. **Click** "Start Transcription"
@@ -169,16 +169,16 @@ with st.sidebar:
     """)
 
     st.markdown("---")
-    st.markdown("### 🔒 Privacy First")
+    st.markdown("### Privacy First")
     st.markdown("""
-    - ✅ Local processing only
-    - ✅ No data sent to cloud
-    - ✅ Works offline after setup
-    - ✅ Your data stays private
+    - Local processing only
+    - No data sent to cloud
+    - Works offline after setup
+    - Your data stays private
     """)
 
     st.markdown("---")
-    st.markdown("### ⚙️ Settings")
+    st.markdown("### Settings")
 
     model_size = st.selectbox(
         "AI Model Size",
@@ -206,7 +206,7 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.markdown("### 💡 Long Video Tips")
+    st.markdown("### Long Video Tips")
     st.markdown("""
     - Use **tiny** or **base** model for 30–60 min videos
     - **10-min chunks** keep peak RAM below 1.5 GB
@@ -215,13 +215,13 @@ with st.sidebar:
     """)
 
     st.markdown("---")
-    st.markdown("### 👨‍💻 Developer")
+    st.markdown("### Developer")
     st.markdown("Developed by [Zaid Hassan](https://zaidhassan.me)")
 
 # -------------------------------------------------------------------------
 # Main content — Upload
 # -------------------------------------------------------------------------
-st.markdown("## 📁 Upload Video File")
+st.markdown("## Upload Video File")
 
 uploaded_file = st.file_uploader(
     "Choose a video file",
@@ -254,12 +254,12 @@ if uploaded_file:
     col1, col2 = st.columns([1, 1])
     with col1:
         start_button = st.button(
-            "🚀 Start Transcription",
+            "Start Transcription",
             type="primary",
             disabled=st.session_state.processing,
         )
     with col2:
-        clear_button = st.button("🗑️ Clear", disabled=st.session_state.processing)
+        clear_button = st.button("Clear", disabled=st.session_state.processing)
 
     if clear_button:
         st.session_state.current_file = None
@@ -285,7 +285,7 @@ if uploaded_file:
 
         try:
             # --- Stream upload to disk ---
-            status_text.text("💾 Saving uploaded video to disk…")
+            status_text.text("Saving uploaded video to disk...")
             progress_bar.progress(2)
 
             CHUNK_SIZE = 4 * 1024 * 1024  # 4 MB write buffer
@@ -301,8 +301,8 @@ if uploaded_file:
 
             progress_bar.progress(5)
             status_text.text(
-                f"✅ Video saved ({total_written / (1024 * 1024):.1f} MB). "
-                "Preparing transcription…"
+                f"Video saved ({total_written / (1024 * 1024):.1f} MB). "
+                "Preparing transcription..."
             )
 
             # ---------------------------------------------------------------- #
@@ -312,7 +312,7 @@ if uploaded_file:
                 # Reserve first 5% for upload, last 0% for display finish
                 scaled = 5 + int(percent * 0.94)
                 progress_bar.progress(min(scaled, 99))
-                status_text.text(f"🔄 {message}")
+                status_text.text(message)
 
             # ---------------------------------------------------------------- #
             # Run transcription                                                 #
@@ -325,7 +325,7 @@ if uploaded_file:
             )
 
             progress_bar.progress(100)
-            status_text.text("✅ Transcription complete!")
+            status_text.text("Transcription complete!")
 
             # Store only the lightweight result object (text + segment list)
             # Do NOT store the video/audio bytes in session_state
@@ -334,10 +334,10 @@ if uploaded_file:
 
         except Exception as exc:
             st.session_state.processing = False
-            status_text.text("❌ Transcription failed.")
+            status_text.text("Transcription failed.")
             st.error(f"**Error:** {exc}")
             import traceback
-            with st.expander("🔍 Technical details (for debugging)"):
+            with st.expander("Technical details (for debugging)"):
                 st.code(traceback.format_exc())
 
         finally:
@@ -351,7 +351,7 @@ if uploaded_file:
         st.rerun()
 
 elif st.session_state.processing:
-    st.info("⏳ Processing in progress… Please wait and do not reload the page.")
+    st.info("Processing in progress... Please wait and do not reload the page.")
 
 # -------------------------------------------------------------------------
 # Display transcription results
@@ -360,18 +360,18 @@ if st.session_state.transcription_result:
     result = st.session_state.transcription_result
 
     st.markdown("---")
-    st.markdown("## ✅ Transcription Complete!")
+    st.markdown("## Transcription Complete")
 
     st.markdown(f"""
     <div class="success-box">
-        <strong>🎉 Success!</strong> Your video has been transcribed with
+        <strong>Done.</strong> Your video has been transcribed with
         <strong>{len(result.segments)}</strong> segment(s).
         {f'Detected language: <strong>{result.language}</strong>.' if result.language else ''}
     </div>
     """, unsafe_allow_html=True)
 
     # ---- Transcript viewer ----
-    st.markdown("### 📝 Transcript")
+    st.markdown("### Transcript")
     st.text_area(
         "Full Transcript",
         result.text,
@@ -380,7 +380,7 @@ if st.session_state.transcription_result:
     )
 
     # ---- Timestamped segments ----
-    with st.expander("🕐 View Timestamped Segments", expanded=False):
+    with st.expander("View Timestamped Segments", expanded=False):
         for segment in result.segments:
             h = int(segment.start // 3600)
             m = int((segment.start % 3600) // 60)
@@ -395,19 +395,19 @@ if st.session_state.transcription_result:
 
     # ---- Download buttons ----
     st.markdown("---")
-    st.markdown("### 💾 Download Transcript")
+    st.markdown("### Download Transcript")
 
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
 
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        if st.button("📋 Copy Text"):
+        if st.button("Copy Text"):
             st.code(result.text, language=None)
 
     with col2:
         st.download_button(
-            label="📄 Download .TXT",
+            label="Download .TXT",
             data=result.text,
             file_name=f"transcript_{ts}.txt",
             mime="text/plain",
@@ -415,7 +415,7 @@ if st.session_state.transcription_result:
 
     with col3:
         st.download_button(
-            label="🎬 Download .SRT",
+            label="Download .SRT",
             data=create_srt_content(result.segments),
             file_name=f"transcript_{ts}.srt",
             mime="text/plain",
@@ -423,18 +423,18 @@ if st.session_state.transcription_result:
 
     with col4:
         st.download_button(
-            label="🌐 Download .VTT",
+            label="Download .VTT",
             data=create_vtt_content(result.segments),
             file_name=f"transcript_{ts}.vtt",
             mime="text/vtt",
         )
 
-    st.markdown("### 📄 Additional Formats")
+    st.markdown("### Additional Formats")
     col5, col6 = st.columns(2)
 
     with col5:
         st.download_button(
-            label="📑 Download .DOCX",
+            label="Download .DOCX",
             data=create_docx_content(result.text),
             file_name=f"transcript_{ts}.docx",
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -442,7 +442,7 @@ if st.session_state.transcription_result:
 
     with col6:
         st.download_button(
-            label="📕 Download .PDF",
+            label="Download .PDF",
             data=create_pdf_content(result.text),
             file_name=f"transcript_{ts}.pdf",
             mime="application/pdf",
@@ -450,7 +450,7 @@ if st.session_state.transcription_result:
 
     # ---- Reset ----
     st.markdown("---")
-    if st.button("🔄 Process Another Video"):
+    if st.button("Process Another Video"):
         st.session_state.transcription_result = None
         st.session_state.current_file = None
         st.rerun()
@@ -461,7 +461,7 @@ if st.session_state.transcription_result:
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: #666; padding: 1rem;">
-    <p>🎙️ AI Transcriber | Local AI-Powered Speech to Text</p>
+    <p>AI Transcriber | Local AI-Powered Speech to Text</p>
     <p>Developed by <a href="https://zaidhassan.me" target="_blank">Zaid Hassan</a></p>
 </div>
 """, unsafe_allow_html=True)
