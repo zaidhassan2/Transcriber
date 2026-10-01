@@ -1,0 +1,24 @@
+[theme]
+primaryColor = "#667eea"
+secondaryColor = "#764ba2"
+backgroundColor = "#f8f9fa"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#111827"
+font = "sans serif"
+
+[client]
+showErrorDetails = false
+# 4 GB upload limit — allows large video files to reach the server.
+# Streamlit Community Cloud enforces its own hard cap (≈ 200 MB for free tier
+# browser uploads). For larger files the user should pre-upload to storage.
+maxUploadSize = 4000
+
+[server]
+# Increase WebSocket message size so large responses (long transcripts) are
+# not silently dropped.
+maxMessageSize = 4000
+# Prevent Streamlit from auto-rerunning while a long transcription is active.
+runOnSave = false
+
+[logger]
+level = "info"
