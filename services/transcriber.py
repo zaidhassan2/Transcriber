@@ -14,6 +14,23 @@ from typing import Callable, Generator, List, Optional, Tuple
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
+# Compatibility shim: patch av.open() to tolerate metadata_errors kwarg
+# removed in av>=12, but still passed by faster-whisper 1.x
+# ---------------------------------------------------------------------------
+try:
+    import av as _av_mod
+    _orig_av_open = _av_mod.open
+
+    def _av_open_compat(*args, **kwargs):
+        kwargs.pop("metadata_errors", None)  # removed in av>=12
+        return _orig_av_open(*args, **kwargs)
+
+    _av_mod.open = _av_open_compat
+except Exception:
+    pass  # av not installed yet or already compatible – no action needed
+
+
+# ---------------------------------------------------------------------------
 # Data models (public API – unchanged)
 # ---------------------------------------------------------------------------
 
