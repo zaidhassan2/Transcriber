@@ -1,6 +1,7 @@
 streamlit>=1.28,<2
 faster-whisper>=1.0.3
-# torch/openai-whisper removed – faster-whisper uses ctranslate2, not PyTorch
+# ctranslate2>=4.0 is required by faster-whisper 1.x (v3.x has incompatible API)
+ctranslate2>=4.0,<5
 yt-dlp>=2024.1.0
 imageio-ffmpeg>=0.4.9
 python-multipart>=0.0.9
@@ -8,4 +9,3 @@ python-dotenv>=1.0.0
 pydantic>=2.0,<3
 reportlab>=4.0.7
 python-docx>=1.0.0
-ctranslate2>=3.24.0
